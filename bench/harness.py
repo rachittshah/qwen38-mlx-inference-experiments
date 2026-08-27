@@ -133,8 +133,10 @@ def start_server(cfg: dict, main: str, draft: str | None) -> tuple[subprocess.Po
         "--model", main,
         "--host", s.get("host", "127.0.0.1"), "--port", str(port),
     ]
-    if s.get("use_draft") and draft:
-        argv += ["--draft-model", draft, "--draft-kind", s.get("draft_kind", "mtp")]
+    # A config may point at a custom drafter (e.g. DFlash) via draft_model_path.
+    draft_path = os.path.expanduser(s["draft_model_path"]) if s.get("draft_model_path") else draft
+    if s.get("use_draft") and draft_path:
+        argv += ["--draft-model", draft_path, "--draft-kind", s.get("draft_kind", "mtp")]
     argv += s.get("flags", [])
 
     env = dict(os.environ)

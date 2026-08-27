@@ -1,0 +1,16 @@
+{
+  "name": "tier1_dflash",
+  "tier": 1,
+  "description": "DFlash-2 drafter (block-diffusion, incoai/Qwen3.8-27B-DFlash2). Greedy. Decode speed vs MTP.",
+  "server": {
+    "port": 8081,
+    "host": "127.0.0.1",
+    "use_draft": true,
+    "draft_kind": "dflash",
+    "draft_model_path": "incoai/Qwen3.8-27B-DFlash2",
+    "flags": ["--max-num-seqs", "1", "--draft-block-size", "8"],
+    "env": {},
+    "startup_timeout": 300
+  },
+  "workload": { "type": "short", "turns": 2, "max_tokens": 200 }
+}

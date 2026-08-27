@@ -127,7 +127,18 @@ Workload: a short code prompt. Generate 200 tokens. Measure decode speed.
   So this table uses decode tok/s, which is the real end-to-end measure.
 - All runs stayed safe. Peak memory <= 18.1 GB. Swap 0.0 GB. The guard never fired.
 
-DFlash drafter: _pending check_
+**DFlash-2 drafter** (`incoai/Qwen3.8-27B-DFlash2`, block-diffusion, greedy):
+
+| Config | Decode tok/s (warm) | vs no-draft | Drafter RAM |
+|---|---|---|---|
+| MTP block 4 | 40.5 | 1.83x | +0.85 GB |
+| **DFlash-2** | **45.3** | **2.05x** | +3.6 GB |
+
+- DFlash-2 loads in mlx-vlm 0.6.17 and is the fastest drafter tested. It gives 45.3 tok/s warm.
+- The gain over MTP is small (~12%). DFlash also needs ~3.6 GB more memory than the MTP head.
+- Public blogs claimed ~3.6x for DFlash. That figure was for an 8-bit main model. On this 4-bit
+  model the gain is small. This is why we measure on the real machine.
+- Safe: peak 20.5 GB, swap 0.0 GB, guard did not fire.
 
 ### Later tiers
 

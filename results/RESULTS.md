@@ -8,6 +8,7 @@ Measured on Apple Silicon, 36 GB. One server at a time. Memory guarded.
 |---|---|---|---|---|---|---|
 | tier0_apc | 16.2 | 22.3 | 24.0 | 0.3 | 0.00 | False |
 | tier0_baseline | 16.2 | 19.8 | 24.0 | 0.1 | 0.00 | False |
+| tier1_dflash | 18.9 | 20.5 | 19.0 | 0.1 | 0.00 | False |
 | tier1_mtp_b2 | 16.2 | 17.2 | 16.0 | 0.1 | 0.00 | False |
 | tier1_mtp_b4 | 16.2 | 17.8 | 17.0 | 0.1 | 0.00 | False |
 | tier1_mtp_b6 | 16.2 | 17.8 | 18.0 | 0.2 | 0.00 | False |
@@ -24,6 +25,8 @@ Measured on Apple Silicon, 36 GB. One server at a time. Memory guarded.
 | tier0_baseline | 1 | 15264 | 0 | 0.00 | 128.91 | 129.78 | 10.20 | - |
 | tier0_baseline | 2 | 15318 | 0 | 0.00 | 172.87 | 172.91 | 13.10 | - |
 | tier0_baseline | 3 | 15394 | 0 | 0.00 | 146.26 | 146.31 | 13.30 | - |
+| tier1_dflash | 1 | 25 | 0 | 0.00 | 1.19 | 1.19 | 39.00 | - |
+| tier1_dflash | 2 | 25 | 0 | 0.00 | 0.19 | 0.20 | 45.30 | - |
 | tier1_mtp_b2 | 1 | 25 | 0 | 0.00 | 0.20 | 1.15 | 34.70 | - |
 | tier1_mtp_b2 | 2 | 25 | 0 | 0.00 | 0.19 | 0.20 | 36.50 | - |
 | tier1_mtp_b4 | 1 | 25 | 0 | 0.00 | 0.20 | 1.19 | 41.80 | - |
