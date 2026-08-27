@@ -1,0 +1,24 @@
+  pass: cold_first_start (free RAM 21.0 GB)
+  pass: warm_after_restart (free RAM 25.0 GB)
+
+CAG result:
+[
+  {
+    "label": "cold_first_start",
+    "latency_s": 95.13,
+    "prefill_s": 93.626,
+    "cache_hit_rate": 0.0,
+    "prompt_tokens": 15253,
+    "cached_tokens": 0,
+    "peak_footprint_gb": 20.5
+  },
+  {
+    "label": "warm_after_restart",
+    "latency_s": 1.99,
+    "prefill_s": 0.295,
+    "cache_hit_rate": 0.9989510260276667,
+    "prompt_tokens": 15253,
+    "cached_tokens": 15237,
+    "peak_footprint_gb": 20.5
+  }
+]

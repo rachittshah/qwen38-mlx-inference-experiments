@@ -140,10 +140,33 @@ Workload: a short code prompt. Generate 200 tokens. Measure decode speed.
   model the gain is small. This is why we measure on the real machine.
 - Safe: peak 20.5 GB, swap 0.0 GB, guard did not fire.
 
-### Later tiers
+### Tier 3 — CAG: disk cache survives a restart (done)
 
-- Tier 3 CAG (disk reuse across restart): _pending_
-- Tier 5 OpenCode end-to-end: _pending_
+Question: does the APC disk cache stay valid after you stop and restart the server?
+Method: run the same 15K prompt in two separate server processes. Start with an empty disk cache.
+
+| Pass | Latency | Prefill | Cache hit |
+|---|---|---|---|
+| cold (empty disk) | 95.1 s | 93.6 s | 0% |
+| warm (after full restart) | **1.99 s** | 0.30 s | 99.9% |
+
+- **Yes. The disk cache survives a restart.** A fresh server reused the 15K prefix from disk.
+- Cold 95 s to warm 2 s. That is about 48x.
+- This is the strongest experimental result. You can precompute a constant prompt once. Then every
+  new server starts fast. This is Cache-Augmented Generation (CAG) for the system prompt.
+- Safe: both passes peaked 20.5 GB. Swap 0.0 GB.
+
+### Tier 5 — OpenCode end-to-end (done)
+
+See the table below (filled after the run).
+
+### Tier 2 and Tier 4
+
+- Tier 2 (quant builds): scripts provided, not run. See the blocker note above and
+  `scripts/tier2_build_quant.sh`.
+- Tier 4 (serving stack): `--max-num-seqs 1` is used everywhere for single-user safety.
+  A continuous-batching demo is in `scripts/tier4_continuous_batch.sh`. Raise `--max-num-seqs`
+  only with memory headroom.
 
 ---
 

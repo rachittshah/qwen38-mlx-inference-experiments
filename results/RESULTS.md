@@ -37,3 +37,10 @@ Measured on Apple Silicon, 36 GB. One server at a time. Memory guarded.
 | tier1_mtp_b8 | 2 | 25 | 0 | 0.00 | 0.19 | 0.20 | 30.00 | - |
 | tier1_nodraft | 1 | 25 | 0 | 0.00 | 0.20 | 0.79 | 22.20 | - |
 | tier1_nodraft | 2 | 25 | 0 | 0.00 | 0.18 | 0.23 | 22.10 | - |
+
+## Tier 3 — CAG (disk prefix reuse across restart)
+
+| pass | latency s | prefill s | cache hit | prompt tok | cached tok | peak GB |
+|---|---|---|---|---|---|---|
+| cold_first_start | 95.13 | 93.63 | 0.00 | 15253 | 0 | 20.5 |
+| warm_after_restart | 1.99 | 0.29 | 1.00 | 15253 | 15237 | 20.5 |
