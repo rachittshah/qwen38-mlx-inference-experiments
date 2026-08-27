@@ -1,0 +1,13 @@
+{
+  "name": "tier5_opencode",
+  "tier": 5,
+  "description": "OpenCode end-to-end. APC off vs on. 2 calls each.",
+  "apc_off": {
+    "call1_s": 107.1,
+    "call2_s": 143.5
+  },
+  "apc_on": {
+    "call1_s": 143.2,
+    "call2_s": 2.7
+  }
+}

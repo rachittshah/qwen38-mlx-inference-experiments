@@ -89,6 +89,20 @@ cat results/RESULTS.md
 The runs write one JSON file per config to `results/`.
 The full table is in [`results/RESULTS.md`](results/RESULTS.md).
 
+### Summary (all runs on 36 GB Apple Silicon, 4-bit model)
+
+| Optimization | Metric | Before | After | Gain |
+|---|---|---|---|---|
+| **APC prefix cache** (Tier 0) | Time to first token, per turn | 130-173 s | 1-2 s | **~70-90x** |
+| **CAG disk reuse** (Tier 3) | Prefill after restart | 95 s | 2 s | **~48x** |
+| **OpenCode end-to-end** (Tier 5) | Repeat call | 143 s | 2.7 s | **~53x** |
+| **MTP block 4** (Tier 1) | Decode speed | 22.1 tok/s | 40.5 tok/s | **1.83x** |
+| **DFlash-2 drafter** (Tier 1) | Decode speed | 22.1 tok/s | 45.3 tok/s | **2.05x** |
+
+**Big wins are about caching the prompt (APC/CAG). They are free. Just set `APC_ENABLED=1`.**
+**Speculative decoding (MTP/DFlash) is a smaller, separate win on decode speed.**
+Every run stayed safe. Peak memory <= 22.3 GB. Swap 0.0 GB. The guard never fired.
+
 ### Tier 0 — APC prefix cache (done)
 
 APC is the biggest win. It is off by default (`APC_ENABLED=0`). Turn it on.
@@ -158,7 +172,20 @@ Method: run the same 15K prompt in two separate server processes. Start with an 
 
 ### Tier 5 — OpenCode end-to-end (done)
 
-See the table below (filled after the run).
+Question: does APC help the real OpenCode client, not just the API?
+Method: start the server. Run two `opencode run` calls. Do this with APC off, then APC on.
+Each call sends the OpenCode system+tools prompt (~15K tokens).
+
+| OpenCode | Call 1 | Call 2 |
+|---|---|---|
+| APC off | 107.1 s | 143.5 s |
+| APC on | 143.2 s (cold) | **2.7 s** |
+
+- **APC works with the real client. Call 2 drops from ~143 s to 2.7 s. That is about 53x.**
+- With APC off, every call pays the full prefill. Call 1 and call 2 both stay slow.
+- With APC on, call 1 fills the cache. Call 2 reuses it and starts almost at once.
+- This is the real-world proof of the Tier 0 result.
+- Safe: `--max-num-seqs 1`, one server, swap 0.
 
 ### Tier 2 and Tier 4
 

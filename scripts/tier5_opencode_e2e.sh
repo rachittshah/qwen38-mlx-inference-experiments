@@ -10,8 +10,10 @@
 set -uo pipefail
 
 PORT=8081
-MODEL=$(python -c "from bench.harness import resolve_paths; print(resolve_paths()[0])")
+# Use the exact model id from the OpenCode config, so the client and server agree byte-for-byte.
+MODEL=$(python3 -c "import json,os;d=json.load(open(os.path.expanduser('~/.config/opencode/opencode.json')));print(list(d['provider']['mlx']['models'])[0])")
 DRAFT=$(python -c "from bench.harness import resolve_paths; print(resolve_paths()[1])")
+echo "model: $MODEL"
 OUT=results/tier5_opencode.txt
 : > "$OUT"
 

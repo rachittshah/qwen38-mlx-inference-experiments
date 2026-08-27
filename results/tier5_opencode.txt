@@ -1,0 +1,8 @@
+=== APC=0 ===
+  opencode call 1: 107.1s
+  opencode call 2: 143.5s
+=== APC=1 ===
+  opencode call 1: 143.2s
+  opencode call 2: 2.7s
+
+Compare call 2 of APC=1 vs APC=0. Lower is better.

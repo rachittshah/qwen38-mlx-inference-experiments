@@ -83,6 +83,16 @@ def main() -> None:
                 )
         lines.append("")
 
+    # Tier 5 OpenCode end-to-end.
+    t5 = [r for r in results if r.get("tier") == 5 and "apc_off" in r]
+    if t5:
+        lines += ["## Tier 5 — OpenCode end-to-end (APC off vs on)", "",
+                  "| APC | call 1 (s) | call 2 (s) |", "|---|---|---|"]
+        for r in t5:
+            lines.append(f"| off | {_fmt(r['apc_off'].get('call1_s'))} | {_fmt(r['apc_off'].get('call2_s'))} |")
+            lines.append(f"| on | {_fmt(r['apc_on'].get('call1_s'))} | {_fmt(r['apc_on'].get('call2_s'))} |")
+        lines.append("")
+
     # Errors, if any.
     errs = [r for r in results if "error" in r]
     if errs:

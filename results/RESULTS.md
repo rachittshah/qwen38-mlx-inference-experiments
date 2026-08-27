@@ -44,3 +44,10 @@ Measured on Apple Silicon, 36 GB. One server at a time. Memory guarded.
 |---|---|---|---|---|---|---|
 | cold_first_start | 95.13 | 93.63 | 0.00 | 15253 | 0 | 20.5 |
 | warm_after_restart | 1.99 | 0.29 | 1.00 | 15253 | 15237 | 20.5 |
+
+## Tier 5 — OpenCode end-to-end (APC off vs on)
+
+| APC | call 1 (s) | call 2 (s) |
+|---|---|---|
+| off | 107.10 | 143.50 |
+| on | 143.20 | 2.70 |
