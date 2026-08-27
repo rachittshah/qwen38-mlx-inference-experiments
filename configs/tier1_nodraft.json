@@ -1,0 +1,14 @@
+{
+  "name": "tier1_nodraft",
+  "tier": 1,
+  "description": "No speculative decoding (drafter off). Pure autoregressive decode-speed baseline.",
+  "server": {
+    "port": 8081,
+    "host": "127.0.0.1",
+    "use_draft": false,
+    "flags": ["--max-num-seqs", "1"],
+    "env": {},
+    "startup_timeout": 180
+  },
+  "workload": { "type": "short", "turns": 2, "max_tokens": 200 }
+}

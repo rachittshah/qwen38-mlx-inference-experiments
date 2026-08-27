@@ -1,0 +1,20 @@
+{
+  "name": "tier0_baseline",
+  "tier": 0,
+  "description": "Baseline: APC OFF, default wired limit. MTP drafter, block 4, single seq. Growing 15K-prefix conversation.",
+  "server": {
+    "port": 8081,
+    "host": "127.0.0.1",
+    "use_draft": true,
+    "draft_kind": "mtp",
+    "flags": ["--max-num-seqs", "1", "--draft-block-size", "4"],
+    "env": {},
+    "startup_timeout": 180
+  },
+  "workload": {
+    "type": "repeat_prefix",
+    "system_target_tokens": 15000,
+    "turns": 3,
+    "max_tokens": 64
+  }
+}

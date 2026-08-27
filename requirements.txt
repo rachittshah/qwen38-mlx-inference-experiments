@@ -1,0 +1,11 @@
+# Core runtime. mlx-vlm 0.6.16+ adds qwen3_5 support and APC prefix caching.
+mlx-vlm>=0.6.16
+mlx>=0.32
+huggingface_hub>=0.26
+jinja2>=3.1
+
+# Optional. Needed only for Tier 2 quantization builds (mlx_lm.convert / dwq / awq).
+# mlx-lm>=0.31
+
+# Optional. Needed only for the Tier 3 prompt-compression experiment.
+# llmlingua>=0.2

@@ -1,0 +1,24 @@
+{
+  "name": "tier0_apc",
+  "tier": 0,
+  "description": "APC ON (prefix caching) + disk tier. Same MTP/block/seq as baseline; only APC differs. Turn 2+ should reuse the 15K prefix.",
+  "server": {
+    "port": 8081,
+    "host": "127.0.0.1",
+    "use_draft": true,
+    "draft_kind": "mtp",
+    "flags": ["--max-num-seqs", "1", "--draft-block-size", "4"],
+    "env": {
+      "APC_ENABLED": "1",
+      "APC_DISK_PATH": "~/.cache/mlx_vlm_apc",
+      "APC_NUM_BLOCKS": "2048"
+    },
+    "startup_timeout": 180
+  },
+  "workload": {
+    "type": "repeat_prefix",
+    "system_target_tokens": 15000,
+    "turns": 3,
+    "max_tokens": 64
+  }
+}

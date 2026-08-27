@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Model weights and caches (never commit — they are large)
+*.safetensors
+models/
+.cache/
+
+# Raw server logs (large; parsed results are kept in results/*.json)
+results/_server_*.log
+
+# OS
+.DS_Store
