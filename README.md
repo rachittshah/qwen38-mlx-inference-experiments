@@ -197,6 +197,34 @@ Each call sends the OpenCode system+tools prompt (~15K tokens).
 
 ---
 
+## Low-memory client (print harness)
+
+OpenCode sends a ~15K-token prompt and asks for up to 8192 output tokens. On a 36 GB Mac that
+grows the KV cache until Metal runs out of memory. Use this instead when you just want to talk
+to the model cheaply. It sends only your short prompt. It caps output small. It is stateless by
+default, so the KV cache stays tiny. It streams tokens and prints them. It uses the Python
+standard library only, so the client is a few MB.
+
+```bash
+# one-shot
+python scripts/chat.py "Write a haiku about GPUs."
+
+# smaller output cap = less memory
+python scripts/chat.py --max-tokens 128 "Name three primes."
+
+# interactive REPL (Ctrl-D to quit); stateless by default
+python scripts/chat.py
+
+# keep a small memory window (2 turns) if you need context
+python scripts/chat.py --history 2
+```
+
+Measured: a tiny prompt (22 tokens) served in ~0.5-1.7 s. Swap stayed at 0. The model weights
+still use ~20 GB (fixed for a 27B 4-bit model), but this client adds almost nothing on top.
+
+Do NOT drive the server with a 15K prompt and an 8192 output cap on this machine. That path
+hit a Metal out-of-memory. Keep prompts and output small here.
+
 ## Repository layout
 
 ```
