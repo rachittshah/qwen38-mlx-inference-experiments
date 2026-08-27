@@ -1,0 +1,15 @@
+{
+  "name": "tier1_mtp_b2",
+  "tier": 1,
+  "description": "MTP speculative decoding, draft-block-size 2. Decode-speed + acceptance.",
+  "server": {
+    "port": 8081,
+    "host": "127.0.0.1",
+    "use_draft": true,
+    "draft_kind": "mtp",
+    "flags": ["--max-num-seqs", "1", "--draft-block-size", "2"],
+    "env": {},
+    "startup_timeout": 180
+  },
+  "workload": { "type": "short", "turns": 2, "max_tokens": 200 }
+}

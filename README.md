@@ -87,15 +87,36 @@ cat results/RESULTS.md
 ## Results
 
 The runs write one JSON file per config to `results/`.
-The summary table is in [`results/RESULTS.md`](results/RESULTS.md).
+The full table is in [`results/RESULTS.md`](results/RESULTS.md).
 
-**Status: runs in progress. This section updates as each tier finishes.**
+### Tier 0 — APC prefix cache (done)
 
-### Headline (fill after Tier 0)
+APC is the biggest win. It is off by default (`APC_ENABLED=0`). Turn it on.
 
-- APC prefix cache turn-2 prefill: _pending_
+Workload: a growing chat. Each turn adds to a constant ~15K-token system prompt. This copies the OpenCode loop.
+
+| Turn | Baseline TTFT (APC off) | APC TTFT (on) | APC cache hit |
+|---|---|---|---|
+| 1 | 129.8 s | 1.57 s | 99.9% |
+| 2 | 172.9 s | 0.93 s | 99.7% |
+| 3 | 146.3 s | 1.82 s | 99.6% |
+
+- **APC cuts time-to-first-token from ~130-173 s to ~1-2 s. That is about 70-90x.**
+- APC serves ~99.7% of the prompt from cache. So it skips almost all of the prefill.
+- Without APC, every turn re-computes the whole prompt. The cost stays high.
+- **Memory stayed safe.** Peak 19.8 GB (baseline) and 22.3 GB (APC). Swap stayed at 0.0 GB. The guard never fired.
+- Note: the APC disk tier held the prompt from an earlier run. So even turn 1 was a cache hit here.
+  This shows the Tier 3 CAG effect: the cache survives a restart.
+
+### Tier 1 — Speculative decoding (in progress)
+
 - Best MTP block size: _pending_
-- Peak memory, all runs: _pending_
+- DFlash drafter: _pending_
+
+### Later tiers
+
+- Tier 3 CAG (disk reuse across restart): _pending_
+- Tier 5 OpenCode end-to-end: _pending_
 
 ---
 

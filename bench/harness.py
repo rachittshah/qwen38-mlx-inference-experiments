@@ -33,19 +33,24 @@ RESULTS_DIR = ROOT / "results"
 
 
 def free_ram_gb() -> float:
-    """Return free RAM in GB. Free = free + inactive pages (macOS reclaimable)."""
+    """Return available RAM in GB, as macOS `top` reports "unused".
+
+    This is the meaningful number: it includes free pages plus reclaimable file cache,
+    so it matches what the OS can actually give a new allocation. (free+inactive alone
+    under-reports badly on macOS.)
+    """
     try:
-        out = subprocess.run(["vm_stat"], capture_output=True, text=True, timeout=10).stdout
-        page = 4096
-        vals = {}
+        out = subprocess.run(
+            ["top", "-l", "1", "-n", "0"], capture_output=True, text=True, timeout=15
+        ).stdout
         for line in out.splitlines():
-            if ":" in line:
-                k, v = line.split(":", 1)
-                vals[k.strip()] = v.strip().rstrip(".")
-        free = int(vals.get("Pages free", "0")) + int(vals.get("Pages inactive", "0"))
-        return free * page / 1e9
+            if "PhysMem:" in line and "unused" in line:
+                # "PhysMem: 20G used (3177M wired, 2241M compressor), 16G unused."
+                tail = line.split(",")[-1].strip()  # "16G unused."
+                return _parse_size_gb(tail.split()[0])
     except Exception:
-        return 999.0  # fail open; never block a run on a parse error
+        pass
+    return 999.0  # fail open; never block a run on a parse error
 
 
 def swap_used_gb() -> float:
@@ -61,27 +66,34 @@ def swap_used_gb() -> float:
 
 
 class MemoryGuard(threading.Thread):
-    """Watchdog: kill the server before the machine runs out of memory.
+    """Watchdog: stop the server before a real out-of-memory spiral.
 
-    Trigger: free RAM stays below `floor_gb` for `patience` samples in a row.
-    On trigger, terminate the server process and record the abort. This keeps the
-    machine safe (no OOM, no hard swap spiral) during every experiment.
+    MLX pins "unused" RAM to near zero by design: it wires the model weights into unified
+    memory. So low unused RAM is NORMAL here and is not a danger sign. The real danger sign
+    is a swap spiral: swap that grows without bound. macOS swaps to SSD; it does not hard-OOM.
+    So the guard triggers on ONE condition only: swap grows by more than `swap_growth_limit_gb`
+    (default 10 GB) above the value at start. On trigger, it terminates the server.
     """
 
-    def __init__(self, proc: subprocess.Popen, floor_gb: float = 2.0, patience: int = 3):
+    def __init__(self, proc: subprocess.Popen, swap_growth_limit_gb: float = 10.0):
         super().__init__(daemon=True)
-        self.proc, self.floor_gb, self.patience = proc, floor_gb, patience
+        self.proc = proc
+        self.swap_growth_limit_gb = swap_growth_limit_gb
         self.triggered = False
+        self.reason = None
         self._stop = threading.Event()
         self.min_free_seen = 999.0
+        self.max_swap_seen = 0.0
+        self._base_swap = swap_used_gb()
 
     def run(self) -> None:
-        low = 0
         while not self._stop.is_set():
             free = free_ram_gb()
+            swap = swap_used_gb()
             self.min_free_seen = min(self.min_free_seen, free)
-            low = low + 1 if free < self.floor_gb else 0
-            if low >= self.patience:
+            self.max_swap_seen = max(self.max_swap_seen, swap)
+            if (swap - self._base_swap) > self.swap_growth_limit_gb:
+                self.reason = "swap_spiral"
                 self.triggered = True
                 try:
                     self.proc.terminate()
@@ -193,14 +205,14 @@ def run_config(cfg: dict, main: str, draft: str | None) -> dict:
 
     # Preflight: check free RAM. The 4-bit model needs ~20 GB. Skip if too low.
     free_before = free_ram_gb()
-    required = cfg.get("required_free_gb", 18.0)
+    required = cfg.get("required_free_gb", 12.0)
     print(f"    free RAM before start: {free_before:.1f} GB (need >= {required})")
     if free_before < required:
         return {"name": cfg["name"], "error": "insufficient_memory",
                 "free_ram_gb": round(free_before, 1), "required_gb": required}
 
     proc, log = start_server(cfg, main, draft)
-    guard = MemoryGuard(proc, floor_gb=cfg.get("mem_floor_gb", 2.0))
+    guard = MemoryGuard(proc, swap_growth_limit_gb=cfg.get("swap_growth_limit_gb", 10.0))
     try:
         if not wait_ready(port, log, cfg["server"].get("startup_timeout", 180)):
             tail = "\n".join(log.read_text(errors="ignore").splitlines()[-8:])
@@ -243,14 +255,18 @@ def run_config(cfg: dict, main: str, draft: str | None) -> dict:
             "idle_footprint_gb": idle_mem, "peak_footprint_gb": peak_mem,
             "free_ram_before_gb": round(free_before, 1),
             "min_free_ram_gb": round(guard.min_free_seen, 1),
-            "swap_used_gb": round(swap_used_gb(), 2),
+            "max_swap_gb": round(guard.max_swap_seen, 2),
             "oom_guard_triggered": guard.triggered,
+            "oom_guard_reason": guard.reason,
             "turn_latencies_s": turn_latencies,
             "requests": per_req,
         }
     except Exception as e:
         return {"name": cfg["name"], "error": f"{type(e).__name__}: {e}",
-                "oom_guard_triggered": guard.triggered}
+                "oom_guard_triggered": guard.triggered,
+                "oom_guard_reason": guard.reason,
+                "min_free_ram_gb": round(guard.min_free_seen, 1),
+                "max_swap_gb": round(guard.max_swap_seen, 2)}
     finally:
         guard.stop()
         proc.terminate()

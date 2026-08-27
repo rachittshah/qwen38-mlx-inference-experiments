@@ -55,7 +55,7 @@ def main() -> None:
             lines.append(
                 f"| {r['name']} | {_fmt(r.get('idle_footprint_gb'),1)} | {_fmt(r.get('peak_footprint_gb'),1)} "
                 f"| {_fmt(r.get('free_ram_before_gb'),1)} | {_fmt(r.get('min_free_ram_gb'),1)} "
-                f"| {_fmt(r.get('swap_used_gb'))} | {r.get('oom_guard_triggered')} |"
+                f"| {_fmt(r.get('max_swap_gb'))} | {r.get('oom_guard_triggered')} |"
             )
     lines.append("")
 

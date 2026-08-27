@@ -1,0 +1,16 @@
+model: /Users/rachitt/.cache/huggingface/hub/models--orcarouter--Qwen3.8-27B-Uncensored-MLX/snapshots/0f88c40e9eff87740295f27654558fcb77e21ae5/4-bit
+draft: /Users/rachitt/.cache/huggingface/hub/models--orcarouter--Qwen3.8-27B-Uncensored-MLX/snapshots/0f88c40e9eff87740295f27654558fcb77e21ae5/mtp
+
+=== [tier0_baseline] tier 0 — Baseline: APC OFF, default wired limit. MTP drafter, block 4, single seq. Growing 15K-prefix conversation.
+    free RAM before start: 24.0 GB (need >= 12.0)
+    turn 1: 132.30s end-to-end
+    turn 2: 176.86s end-to-end
+    turn 3: 148.29s end-to-end
+
+=== [tier0_apc] tier 0 — APC ON (prefix caching) + disk tier. Same MTP/block/seq as baseline; only APC differs. Turn 2+ should reuse the 15K prefix.
+    free RAM before start: 24.0 GB (need >= 12.0)
+    turn 1: 2.74s end-to-end
+    turn 2: 2.99s end-to-end
+    turn 3: 4.40s end-to-end
+
+Wrote 2 result file(s) to /Users/rachitt/qwen38-mlx-inference-experiments/results

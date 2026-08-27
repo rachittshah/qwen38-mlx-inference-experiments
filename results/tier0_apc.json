@@ -1,0 +1,81 @@
+{
+  "name": "tier0_apc",
+  "tier": 0,
+  "description": "APC ON (prefix caching) + disk tier. Same MTP/block/seq as baseline; only APC differs. Turn 2+ should reuse the 15K prefix.",
+  "server_flags": [
+    "--max-num-seqs",
+    "1",
+    "--draft-block-size",
+    "4"
+  ],
+  "server_env": {
+    "APC_ENABLED": "1",
+    "APC_DISK_PATH": "~/.cache/mlx_vlm_apc",
+    "APC_NUM_BLOCKS": "2048"
+  },
+  "idle_footprint_gb": 16.2,
+  "peak_footprint_gb": 22.3,
+  "free_ram_before_gb": 24.0,
+  "min_free_ram_gb": 0.3,
+  "max_swap_gb": 0.0,
+  "oom_guard_triggered": false,
+  "oom_guard_reason": null,
+  "turn_latencies_s": [
+    2.74,
+    2.99,
+    4.4
+  ],
+  "requests": [
+    {
+      "request": "6af706010",
+      "prompt_tokens": 15264,
+      "cached_tokens": 15248,
+      "prefill_s": 0.5,
+      "prefill_tps": 30536.5,
+      "ttft_s": 1.572,
+      "generated_tokens": 21,
+      "decode_s": 1.102,
+      "decode_tps": 18.1,
+      "finish_reason": "stop",
+      "accepted_per_round": null,
+      "pct_accepted": null,
+      "avg_draft": null,
+      "spec_rounds": null,
+      "cache_hit_rate": 0.9989517819706499
+    },
+    {
+      "request": "6af6ffed0",
+      "prompt_tokens": 15313,
+      "cached_tokens": 15264,
+      "prefill_s": 0.852,
+      "prefill_tps": 17970.9,
+      "ttft_s": 0.928,
+      "generated_tokens": 31,
+      "decode_s": 2.025,
+      "decode_tps": 14.8,
+      "finish_reason": "stop",
+      "accepted_per_round": null,
+      "pct_accepted": null,
+      "avg_draft": null,
+      "spec_rounds": null,
+      "cache_hit_rate": 0.9968001044863841
+    },
+    {
+      "request": "6af8964d0",
+      "prompt_tokens": 15368,
+      "cached_tokens": 15313,
+      "prefill_s": 1.738,
+      "prefill_tps": 8842.2,
+      "ttft_s": 1.824,
+      "generated_tokens": 22,
+      "decode_s": 2.534,
+      "decode_tps": 8.3,
+      "finish_reason": "stop",
+      "accepted_per_round": null,
+      "pct_accepted": null,
+      "avg_draft": null,
+      "spec_rounds": null,
+      "cache_hit_rate": 0.9964211348256117
+    }
+  ]
+}
