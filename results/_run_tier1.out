@@ -1,0 +1,29 @@
+model: /Users/rachitt/.cache/huggingface/hub/models--orcarouter--Qwen3.8-27B-Uncensored-MLX/snapshots/0f88c40e9eff87740295f27654558fcb77e21ae5/4-bit
+draft: /Users/rachitt/.cache/huggingface/hub/models--orcarouter--Qwen3.8-27B-Uncensored-MLX/snapshots/0f88c40e9eff87740295f27654558fcb77e21ae5/mtp
+
+=== [tier1_nodraft] tier 1 — No speculative decoding (drafter off). Pure autoregressive decode-speed baseline.
+    free RAM before start: 24.0 GB (need >= 12.0)
+    run 1: 9.82s end-to-end
+    run 2: 9.25s end-to-end
+
+=== [tier1_mtp_b2] tier 1 — MTP speculative decoding, draft-block-size 2. Decode-speed + acceptance.
+    free RAM before start: 16.0 GB (need >= 12.0)
+    run 1: 6.95s end-to-end
+    run 2: 5.67s end-to-end
+
+=== [tier1_mtp_b4] tier 1 — MTP speculative decoding, draft-block-size 4 (current default). Decode-speed + acceptance.
+    free RAM before start: 17.0 GB (need >= 12.0)
+    run 1: 6.01s end-to-end
+    run 2: 5.30s end-to-end
+
+=== [tier1_mtp_b6] tier 1 — MTP speculative decoding, draft-block-size 6. Decode-speed + acceptance.
+    free RAM before start: 18.0 GB (need >= 12.0)
+    run 1: 6.27s end-to-end
+    run 2: 5.64s end-to-end
+
+=== [tier1_mtp_b8] tier 1 — MTP speculative decoding, draft-block-size 8. Decode-speed + acceptance.
+    free RAM before start: 19.0 GB (need >= 12.0)
+    run 1: 7.74s end-to-end
+    run 2: 6.85s end-to-end
+
+Wrote 5 result file(s) to /Users/rachitt/qwen38-mlx-inference-experiments/results

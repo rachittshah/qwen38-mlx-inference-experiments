@@ -1,0 +1,57 @@
+{
+  "name": "tier1_nodraft",
+  "tier": 1,
+  "description": "No speculative decoding (drafter off). Pure autoregressive decode-speed baseline.",
+  "server_flags": [
+    "--max-num-seqs",
+    "1"
+  ],
+  "server_env": {},
+  "idle_footprint_gb": 15.3,
+  "peak_footprint_gb": 15.6,
+  "free_ram_before_gb": 24.0,
+  "min_free_ram_gb": 0.2,
+  "max_swap_gb": 0.0,
+  "oom_guard_triggered": false,
+  "oom_guard_reason": null,
+  "turn_latencies_s": [
+    9.82,
+    9.25
+  ],
+  "requests": [
+    {
+      "request": "6c04c3c10",
+      "prompt_tokens": 25,
+      "cached_tokens": 0,
+      "prefill_s": 0.2,
+      "prefill_tps": 124.9,
+      "ttft_s": 0.788,
+      "generated_tokens": 200,
+      "decode_s": 8.966,
+      "decode_tps": 22.2,
+      "finish_reason": "length",
+      "accepted_per_round": null,
+      "pct_accepted": null,
+      "avg_draft": null,
+      "spec_rounds": null,
+      "cache_hit_rate": 0.0
+    },
+    {
+      "request": "6c03f4750",
+      "prompt_tokens": 25,
+      "cached_tokens": 0,
+      "prefill_s": 0.181,
+      "prefill_tps": 138.3,
+      "ttft_s": 0.226,
+      "generated_tokens": 200,
+      "decode_s": 9.003,
+      "decode_tps": 22.1,
+      "finish_reason": "length",
+      "accepted_per_round": null,
+      "pct_accepted": null,
+      "avg_draft": null,
+      "spec_rounds": null,
+      "cache_hit_rate": 0.0
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "tier1_mtp_b4",
+  "tier": 1,
+  "description": "MTP speculative decoding, draft-block-size 4 (current default). Decode-speed + acceptance.",
+  "server_flags": [
+    "--max-num-seqs",
+    "1",
+    "--draft-block-size",
+    "4"
+  ],
+  "server_env": {},
+  "idle_footprint_gb": 16.2,
+  "peak_footprint_gb": 17.8,
+  "free_ram_before_gb": 17.0,
+  "min_free_ram_gb": 0.1,
+  "max_swap_gb": 0.0,
+  "oom_guard_triggered": false,
+  "oom_guard_reason": null,
+  "turn_latencies_s": [
+    6.01,
+    5.3
+  ],
+  "requests": [
+    {
+      "request": "6b508f8d0",
+      "prompt_tokens": 25,
+      "cached_tokens": 0,
+      "prefill_s": 0.198,
+      "prefill_tps": 126.2,
+      "ttft_s": 1.187,
+      "generated_tokens": 200,
+      "decode_s": 4.76,
+      "decode_tps": 41.8,
+      "finish_reason": "length",
+      "accepted_per_round": null,
+      "pct_accepted": null,
+      "avg_draft": null,
+      "spec_rounds": null,
+      "cache_hit_rate": 0.0
+    },
+    {
+      "request": "6b50ac410",
+      "prompt_tokens": 25,
+      "cached_tokens": 0,
+      "prefill_s": 0.186,
+      "prefill_tps": 134.4,
+      "ttft_s": 0.198,
+      "generated_tokens": 200,
+      "decode_s": 5.076,
+      "decode_tps": 39.2,
+      "finish_reason": "length",
+      "accepted_per_round": null,
+      "pct_accepted": null,
+      "avg_draft": null,
+      "spec_rounds": null,
+      "cache_hit_rate": 0.0
+    }
+  ]
+}

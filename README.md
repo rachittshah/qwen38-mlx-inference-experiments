@@ -108,10 +108,26 @@ Workload: a growing chat. Each turn adds to a constant ~15K-token system prompt.
 - Note: the APC disk tier held the prompt from an earlier run. So even turn 1 was a cache hit here.
   This shows the Tier 3 CAG effect: the cache survives a restart.
 
-### Tier 1 — Speculative decoding (in progress)
+### Tier 1 — Speculative decoding (done: MTP sweep)
 
-- Best MTP block size: _pending_
-- DFlash drafter: _pending_
+Workload: a short code prompt. Generate 200 tokens. Measure decode speed.
+
+| Config | Decode tok/s | Speed vs no-draft |
+|---|---|---|
+| no drafter | 22.1 | 1.00x |
+| MTP block 2 | 35.6 | 1.61x |
+| **MTP block 4** | **40.5** | **1.83x** |
+| MTP block 6 | 38.0 | 1.72x |
+| MTP block 8 | 30.1 | 1.36x |
+
+- **MTP block 4 is the best. It gives 40.5 tok/s. That is 1.83x over no drafter.**
+- Bigger blocks do not help. Block 8 drops to 30.1 tok/s. The rejected drafts waste compute.
+- So keep `--draft-block-size 4`. It is already the default.
+- Note: the server's continuous-batching backend does not print accepted-tokens/round.
+  So this table uses decode tok/s, which is the real end-to-end measure.
+- All runs stayed safe. Peak memory <= 18.1 GB. Swap 0.0 GB. The guard never fired.
+
+DFlash drafter: _pending check_
 
 ### Later tiers
 
